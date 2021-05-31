@@ -1,0 +1,66 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <!--img *ngIf="product?.imageSrc" [src]="product?.imageSrc" class="avatar ltr:mr-5 rtl:ml-5"-->
+    <!-- form.get('name').value -->    
+    <h2 *ngIf="criando" class="headline m-0" fxFlex="auto">{{ 'Novo Produto' }}</h2>    
+    <h2 *ngIf="visualizando" class="headline m-0" fxFlex="auto">{{ 'Visualizando Produto' }}</h2>
+    <h2 *ngIf="editando" class="headline m-0" fxFlex="auto">{{ 'Editando Produto' }}</h2>    
+    
+    <!-- <button class="text-secondary" mat-icon-button type="button">
+      {{criando}}-{{visualizando}}-{{editando}}
+    </button> -->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  
+  <mat-dialog-content fxLayout="column">
+    <mat-form-field class="mt-6">
+      <mat-label>Nome</mat-label>
+      <!--[readonly]="isReadOnly"-->
+      <input cdkFocusInitial [attr.readonly]= "visualizando"  
+      formControlName="name" matInput [(ngModel)]="product.name">
+      <!--mat-icon [icIcon]="icPerson" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon-->
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Código</mat-label>
+      <input [attr.readonly]= "visualizando" maxlength="6" formControlName="code" matInput placeholder="" [(ngModel)]="product.code">
+      <!--mat-icon [icIcon]="icPhone" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon-->
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Quantidade</mat-label>
+      <input [attr.readonly]= "visualizando" formControlName="quant" matInput [(ngModel)]="product.quant">
+      <!--mat-icon [icIcon]="icEmail" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon-->
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Valor unitário</mat-label>
+      <input [attr.readonly]= "visualizando" formControlName="price" 
+      value="{{product.price | currency:'BRL':true:'1.2-2' }}"
+      matInput [(ngModel)]="product.price">
+      <!--mat-icon [icIcon]="icBusiness" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon-->
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Valor Total</mat-label>
+      <input [attr.readonly]= "visualizando" formControlName="total" 
+      value="{{product.quant * product.price | currency:'BRL':true:'1.2-2' }}"
+      matInput [(ngModel)]="product.total">      
+      <!--mat-icon [icIcon]="icBusiness" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon-->
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <!-- <button color="primary" mat-button type="button" (click)="isReadOnly = !isReadOnly">{{isReadOnly}}</button>  -->
+    <button (click)="cancel()" mat-button mat-dialog-close type="button">CANCELAR</button>
+    <button *ngIf="criando" [disabled]="!form.valid" (click)="createProduct()" color="primary" mat-button type="submit">GRAVAR</button>
+    <button *ngIf="!criando" [disabled]= "visualizando" (click)="updateProduct()" color="primary" mat-button type="submit">ATUALIZAR</button>
+  </mat-dialog-actions>
+</form>
